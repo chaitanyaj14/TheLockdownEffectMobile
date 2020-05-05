@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en" id="top">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes"> -->
+    <meta name="viewport" content="width=900">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+    <script src="lstD.js"></script>
+    <script src="lstM.js"></script>
+    <script src="lstK.js"></script>
+    <script src="lstC.js"></script>
+
+    <link href="nv.d3.css" rel="stylesheet" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js" charset="utf-8"></script>
+    <script src="nv.d3.js"></script>
+    <script src="stream_layers.js"></script>
+
+    <style>
+        text {
+            font: 12px sans-serif;
+        }
+
+        svg {
+            display: block;
+            float: none;
+            height: 350px !important;
+            width: 750px !important;
+        }
+
+        .btn.btn-primary {
+            min-width: 120px;
+            max-width: 120px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+
+        iframe {
+            width: 100%;
+            height: 435px;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2
+        }
+    </style>
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="images/satellite.png" />
+
+    <title>Lockdown Effect - Temperature</title>
+</head>
+
+<body onload="functionLSTDelhi(); functionLSTMumbai(); functionLSTKolkata(); functionLSTChennai();">
+
+    <!-- <body> -->
+    <!-- Nav Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#top">The Lockdown Effect</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="temperature.html">Temperature</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="air.html">Air</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="water.html">Water</a>
+                </li>
+            </ul>
+        </div>
+        <div class="navbar-collapse collapse  order-3 dual-collapse2">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="https://github.com/chaitanyaj14/TheLockdownEffect.git">GitHub</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://earthengine.google.com/">Earth Engine</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://chaitanyaj14.github.io/TheLockdownEffectIndia/">Desktop Site</a>
+                </li>
+            </ul>
+        </div>
+    </nav><br><br>
+    <div class="container-fluid mt-3">
+        <!-- Side Pills -->
+        <div class="row">
+            <div class="col-3">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab"
+                        aria-controls="v-pills-home" aria-selected="true">Temperature NEX-GDDP</a>
+                    <a class="nav-link" id="v-pills-tempLST-tab" data-toggle="pill" href="#v-pills-tempLST" role="tab"
+                        aria-controls="v-pills-tempLST" aria-selected="false">Land Surface Temperature</a>
+                </div>
+            </div>
+            <div class="col-9">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <!-- Temperature Predicted NASA -->
+                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
+                        aria-labelledby="v-pills-home-tab">
+                        <!-- Card - GEE Maps, Analysis and Metadeta -->
+                        <div class="card ">
+                            <div class="card-header">
+                                <ul class="nav nav-tabs card-header-tabs pull-right" id="tempTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home"
+                                            role="tab" aria-controls="home" aria-selected="true">Map</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="analysis-tab" data-toggle="tab" href="#analysis"
+                                            role="tab" aria-controls="analysis" aria-selected="false">Analysis</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="data-tab" data-toggle="tab" href="#data" role="tab"
+                                            aria-controls="data" aria-selected="false">Analysed Data</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="meta-tab" data-toggle="tab" href="#meta" role="tab"
+                                            aria-controls="meta" aria-selected="false">Meta Data</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card-body">
+                                <div class="tab-content" id="tempTabContent">
+                                    <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                        aria-labelledby="home-tab">
+                                        <iframe
+                                            src="https://javascriptpractice.users.earthengine.app/view/temperaturenex-gddpindia"
+                                            frameborder="5" width="890" height="435">Can't render page</iframe><br>
+                                    </div>
+                                    <div class="tab-pane fade" id="analysis" role="tabpanel"
+                                        aria-labelledby="analysis-tab" style="align-content: center;">
+                                        <div id="carouselExampleControls1" class="carousel slide" data-ride="carousel">
+                                            <div class="carousel-inner">
+                                                <div class="carousel-item active">
+                                                    <h2>Delhi</h2>
+                                                    <svg id="test1" class="mypiechart"
+                                                        style="padding-left: 250px;"></svg>
+
+                                                    <script>
+                                                        var Delhi = [
+                                                            { key: "2018", y: 306.97, color: "#5F5" },
+                                                            { key: "2019", y: 306.98 },
+                                                            { key: "2020", y: 307.17 }
+                                                        ];
+
+                                                        var height = 350;
+                                                        var width = 750;
+
+                                                        nv.addGraph(function () {
+                                                            var chart = nv.models.pieChart()
+                                                                .x(function (d) { return d.key })
+                                                                .y(function (d) { return d.y })
+                                                                .width(width)
+                                                                .height(height)
+                                                                .showTooltipPercent(true);
+
+                                                            d3.select("#test1")
+                                                                .datum(Delhi)
+                                                                .transition().duration(1200)
+                                                                .attr('width', width)
+                                                                .attr('height', height)
+                                                                .call(chart);
+
+                                                            return chart;
+                                                        });
+                                                    </script>
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <h2>Mumbai</h2>
+                                                    <svg id="test2" class="mypiechart"
+                                                        style="padding-left: 250px;"></svg>
+
+                                                    <script>
+                                                        var Mumbai = [
+                                                            { key: "2018", y: 306.06, color: "#5F5" },
+                                                            { key: "2019", y: 305.92 },
+                                                            { key: "2020", y: 306.10 }
+                                                        ];
+
+                                                        var height = 350;
+                                                        var width = 350;
+
+                                                        nv.addGraph(function () {
+                                                            var chart = nv.models.pieChart()
+                                                                .x(function (d) { return d.key })
+                                                                .y(function (d) { return d.y })
+                                                                .width(width)
+                                                                .height(height)
+                                                                .showTooltipPercent(true);
+
+                                                            d3.select("#test2")
+                                                                .datum(Mumbai)
+                                                                .transition().duration(1200)
+                                                                .attr('width', width)
+                                                                .attr('height', height)
+                                                                .call(chart);
+
+                                                            return chart;
+                                                        });
+                                                    </script>
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <h2>Kolkata</h2>
+                                                    <svg id="test3" class="mypiechart"
+                                                        style="padding-left: 250px;"></svg>
+
+                                                    <script>
+                                                        var Kolkata = [
+                                                            { key: "2018", y: 309.09, color: "#5F5" },
+                                                            { key: "2019", y: 309.21 },
+                                                            { key: "2020", y: 309.22 }
+                                                        ];
+
+                                                        var height = 350;
+                                                        var width = 350;
+
+                                                        nv.addGraph(function () {
+                                                            var chart = nv.models.pieChart()
+                                                                .x(function (d) { return d.key })
+                                                                .y(function (d) { return d.y })
+                                                                .width(width)
+                                                                .height(height)
+                                                                .showTooltipPercent(true);
+
+                                                            d3.select("#test3")
+                                                                .datum(Kolkata)
+                                                                .transition().duration(1200)
+                                                                .attr('width', width)
+                                                                .attr('height', height)
+                                                                .call(chart);
+
+                                                            return chart;
+                                                        });
+                                                    </script>
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <h2>Chennai</h2>
+                                                    <svg id="test4" class="mypiechart"
+                                                        style="padding-left: 250px;"></svg>
+
+                                                    <script>
+                                                        var Chennai = [
+                                                            { key: "2018", y: 307.60, color: "#5F5" },
+                                                            { key: "2019", y: 307.67 },
+                                                            { key: "2020", y: 307.74 }
+                                                        ];
+
+                                                        var height = 350;
+                                                        var width = 350;
+
+                                                        nv.addGraph(function () {
+                                                            var chart = nv.models.pieChart()
+                                                                .x(function (d) { return d.key })
+                                                                .y(function (d) { return d.y })
+                                                                .width(width)
+                                                                .height(height)
+                                                                .showTooltipPercent(true);
+
+                                                            d3.select("#test4")
+                                                                .datum(Chennai)
+                                                                .transition().duration(1200)
+                                                                .attr('width', width)
+                                                                .attr('height', height)
+                                                                .call(chart);
+
+                                                            return chart;
+                                                        });
+                                                    </script>
+                                                </div>
+                                            </div>
+                                            <a class="carousel-control-prev" href="#carouselExampleControls1"
+                                                role="button" data-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="sr-only">Previous</span>
+                                            </a>
+                                            <a class="carousel-control-next" href="#carouselExampleControls1"
+                                                role="button" data-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="sr-only">Next</span>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                    <div class="tab-pane fade" id="data" role="tabpanel" aria-labelledby="data-tab">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">City</th>
+                                                    <th scope="col">2018</th>
+                                                    <th scope="col">2019</th>
+                                                    <th scope="col">2020</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">Delhi</th>
+                                                    <td>306.97 K</td>
+                                                    <td>306.98 K</td>
+                                                    <td>307.17 K</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Mumbai</th>
+                                                    <td>306.06 K</td>
+                                                    <td>305.92 K</td>
+                                                    <td>306.10 K</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Kolkata</th>
+                                                    <td>309.09 K</td>
+                                                    <td>309.21 K</td>
+                                                    <td>309.22 K</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Chennai</th>
+                                                    <td>307.60 K</td>
+                                                    <td>307.67 K</td>
+                                                    <td>307.74 K</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="tab-pane fade" id="meta" role="tabpanel" aria-labelledby="meta-tab">
+                                        <h2>NEX-GDDP: NASA Earth Exchange Global Daily Downscaled Climate Projections
+                                        </h2>
+                                        <p><strong>Dataset Availability:</strong> 1950-01-01T00:00:00 -
+                                            2099-12-31T00:00:00
+                                        </p>
+                                        <p><strong>Dataset Provider:</strong> NASA / CSU</p>
+                                        <p>The NASA NEX-GDDP dataset is comprised of downscaled climate scenarios for
+                                            the globe that are derived from the General Circulation Model (GCM) runs
+                                            conducted under the Coupled Model Intercomparison Project Phase 5 (CMIP5,
+                                            see Taylor et al. 2012) and across two of the four greenhouse gas emissions
+                                            scenarios known as Representative Concentration Pathways (RCPs, see
+                                            Meinshausen et al. 2011). The CMIP5 GCM runs were developed in support of
+                                            the Fifth Assessment Report of the Intergovernmental Panel on Climate Change
+                                            (IPCC AR5).
+                                        </p>
+                                        <p>
+                                            This dataset was prepared by the Climate Analytics Group and NASA Ames
+                                            Research Center using the NASA Earth Exchange, and distributed by the NASA
+                                            Center for Climate Simulation (NCCS).
+                                        </p>
+
+                                        <img src="images/bandsTemp.PNG" alt="" width="890px">
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- Land Surface Temperature -->
+                    <div class="tab-pane fade show" id="v-pills-tempLST" role="tabpanel"
+                        aria-labelledby="v-pills-tempLST-tab">
+                        <!-- Card - GEE Maps, Analysis and Metadeta -->
+                        <div class="card">
+                            <div class="card-header">
+                                <ul class="nav nav-tabs card-header-tabs pull-right" id="lstTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#homeLST"
+                                            role="tab" aria-controls="home" aria-selected="true">Map</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="analysis-tab" data-toggle="tab" href="#analysisLST"
+                                            role="tab" aria-controls="analysis" aria-selected="false">Analysis</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="data-tab" data-toggle="tab" href="#dataLST" role="tab"
+                                            aria-controls="data" aria-selected="false">Analysed Data</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="meta-tab" data-toggle="tab" href="#metaLST" role="tab"
+                                            aria-controls="meta" aria-selected="false">Meta Data</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card-body">
+                                <div class="tab-content" id="TabContent">
+                                    <div class="tab-pane fade show active" id="homeLST" role="tabpanel"
+                                        aria-labelledby="home-tab">
+                                        <iframe
+                                            src="https://javascriptpractice.users.earthengine.app/view/temperature-aqua-terra"
+                                            frameborder="5" width="890" , height="435">Can't render page
+                                        </iframe>
+                                        <br>
+                                    </div>
+                                    <div class="tab-pane fade" id="analysisLST" role="tabpanel"
+                                        aria-labelledby="analysis-tab">
+                                        <p></p>
+                                        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                                            <div class="carousel-inner" data-interval="false">
+                                                <div class="carousel-item active">
+                                                    <div id="chartContainerDelhi" style="height: 400px; ">
+                                                    </div>
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <div id="chartContainerMumbai" style="height: 400px;"></div>
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <div id="chartContainerKolkata" style="height: 400px;"></div>
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <div id="chartContainerChennai" style="height: 400px;"></div>
+                                                </div>
+                                            </div>
+                                            <a class=" carousel-control-prev" href="#carouselExampleControls"
+                                                role="button" data-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="sr-only">Previous</span>
+                                            </a>
+                                            <a class="carousel-control-next" href="#carouselExampleControls"
+                                                role="button" data-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="sr-only">Next</span>
+                                            </a>
+                                        </div>
+                                        <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+                                    </div>
+                                    <div class="tab-pane fade" id="dataLST" role="tabpanel" aria-labelledby="data-tab">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" rowspan="2" class="text-center">City
+                                                    </th>
+                                                    <th scope="col" colspan="3" class="text-center">Terra
+                                                    </th>
+                                                    <th scope="col" colspan="3" class="text-center">Aqua
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <thead>
+                                                <tr>
+                                                    <th scope="row"></th>
+                                                    <th scope="col">2018</th>
+                                                    <th scope="col">2019</th>
+                                                    <th scope="col">2020</th>
+
+                                                    <th scope="col">2018</th>
+                                                    <th scope="col">2019</th>
+                                                    <th scope="col">2020</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">Delhi</th>
+                                                    <td>306.95 K</td>
+                                                    <td>306.46 K</td>
+                                                    <td>305.29 K</td>
+                                                    <td>310.69 K</td>
+                                                    <td>310.15 K</td>
+                                                    <td>308.70 K</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Mumbai</th>
+                                                    <td>312.36 K</td>
+                                                    <td>311.83 K</td>
+                                                    <td>311.28 K</td>
+                                                    <td>316.86 K</td>
+                                                    <td>317.29 K</td>
+                                                    <td>316.39 K</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Kolkata</th>
+                                                    <td>308.73 K</td>
+                                                    <td>308.39 K</td>
+                                                    <td>311.28 K</td>
+                                                    <td>310.43 K</td>
+                                                    <td>311.68 K</td>
+                                                    <td>314.72 K</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Chennai</th>
+                                                    <td>310.63 K</td>
+                                                    <td>310.98 K</td>
+                                                    <td>310.72 K</td>
+                                                    <td>313.28 K</td>
+                                                    <td>314.56 K</td>
+                                                    <td>315.05 K</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="tab-pane fade" id="metaLST" role="tabpanel" aria-labelledby="meta-tab">
+                                        <h2>MYD11A1.006 Aqua Land Surface Temperature and Emissivity Daily
+                                            Global 1km
+                                        </h2>
+                                        <p><strong>Dataset Availability:</strong> 2002-07-04T00:00:00 -
+                                            Present
+                                        </p>
+                                        <p><strong>Dataset Provider:</strong> NASA LP DAAC at the USGS EROS
+                                            Center</p>
+                                        <p>The MYD11A1 V6 product provides daily land surface temperature
+                                            (LST) and
+                                            emissivity values in a 1200 x 1200 kilometer grid. The
+                                            temperature value is
+                                            derived from the MOD11_L2 swath product. Above 30 degrees
+                                            latitude, some
+                                            pixels may have multiple observations where the criteria for
+                                            clear-sky are
+                                            met. When this occurs, the pixel value is the average of all
+                                            qualifying
+                                            observations. Provided along with both the day-time and
+                                            night-time surface
+                                            temperature bands and their quality indicator layers are MODIS
+                                            bands 31 and
+                                            32 and six observation layers.
+                                        </p>
+
+                                        <h2>MOD11A1.006 Terra Land Surface Temperature and Emissivity Daily
+                                            Global 1km
+                                        </h2>
+                                        <p><strong>Dataset Availability:</strong> 2000-03-05T00:00:00 -
+                                            Present
+                                        </p>
+                                        <p><strong>Dataset Provider:</strong> NASA LP DAAC at the USGS EROS
+                                            Center</p>
+                                        <p>The MOD11A1 V6 product provides daily land surface temperature
+                                            (LST) and
+                                            emissivity values in a 1200 x 1200 kilometer grid. The
+                                            temperature value is
+                                            derived from the MOD11_L2 swath product. Above 30 degrees
+                                            latitude, some
+                                            pixels may have multiple observations where the criteria for
+                                            clear-sky are
+                                            met. When this occurs, the pixel value is the average of all
+                                            qualifying
+                                            observations. Provided along with both the day-time and
+                                            night-time surface
+                                            temperature bands and their quality indicator layers are MODIS
+                                            bands 31 and
+                                            32 and six observation layers.
+                                        </p>
+
+                                        <img src="images/lst11.PNG" alt="" width="890">
+                                        <br><br>
+                                        <strong>Bitmask for QC_Day</strong>
+                                        <li>
+                                            Bits 0-1: Mandatory QA flags
+                                            <ul>0: LST produced, good quality, not necessary to examine more
+                                                detailed QA
+                                            </ul>
+                                            <ul>1: LST produced, other quality, recommend examination of
+                                                more detailed
+                                                QA</ul>
+                                            <ul>2: LST not produced due to cloud effects</ul>
+                                            <ul>3: LST not produced primarily due to reasons other than
+                                                cloud</ul>
+                                        </li>
+                                        <li>
+                                            Bits 2-3: Data quality flag
+                                            <ul>0: Good data quality</ul>
+                                            <ul>1: Other quality data</ul>
+                                            <ul>2: TBD</ul>
+                                            <ul>3: TBD</ul>
+                                        </li>
+                                        <li>
+                                            Bits 4-5: Emissivity error flag
+                                            <ul>0: Average emissivity error ≤ 0.01</ul>
+                                            <ul>1: Average emissivity error ≤ 0.02</ul>
+                                            <ul>2: Average emissivity error ≤ 0.04</ul>
+                                            <ul>3: Average emissivity error > 0.04</ul>
+                                        </li>
+                                        <li>
+                                            Bits 6-7: LST error flag
+                                            <ul>0: Average LST error ≤ 1K</ul>
+                                            <ul>1: Average LST error ≤ 2K</ul>
+                                            <ul>2: Average LST error ≤ 3K</ul>
+                                            <ul>3: Average LST error > 3K</ul>
+                                        </li>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

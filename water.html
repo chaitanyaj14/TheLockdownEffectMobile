@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en" id="top">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes"> -->
+    <meta name="viewport" content="width=900">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+    <script src="lstD.js"></script>
+    <script src="lstM.js"></script>
+    <script src="lstK.js"></script>
+    <script src="lstC.js"></script>
+
+
+    <link href="nv.d3.css" rel="stylesheet" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js" charset="utf-8"></script>
+    <script src="nv.d3.js"></script>
+    <script src="stream_layers.js"></script>
+
+    <style>
+        text {
+            font: 12px sans-serif;
+        }
+
+        svg {
+            display: block;
+            float: none;
+            height: 350px !important;
+            width: 750px !important;
+        }
+
+        .btn.btn-primary {
+            min-width: 120px;
+            max-width: 120px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+
+        iframe {
+            width: 100%;
+            height: 435px;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2
+        }
+    </style>
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="images/satellite.png" />
+
+    <title>Lockdown Effect - Water</title>
+</head>
+
+<body>
+
+    <!-- <body> -->
+    <!-- Nav Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#top">The Lockdown Effect</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="temperature.html">Temperature</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="air.html">Air</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="water.html">Water</a>
+                </li>
+            </ul>
+        </div>
+        <div class="navbar-collapse collapse  order-3 dual-collapse2">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="https://github.com/chaitanyaj14/TheLockdownEffect.git">GitHub</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://earthengine.google.com/">Earth Engine</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://chaitanyaj14.github.io/TheLockdownEffectIndia/">Desktop Site</a>
+                </li>
+            </ul>
+        </div>
+    </nav><br><br>
+    <div class="container-fluid mt-3">
+        <!-- Side Pills -->
+        <div class="row">
+            <div class="col-3">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active" id="v-pills-waterQ-tab" data-toggle="pill" href="#v-pills-waterQ"
+                        role="tab" aria-controls="v-pills-waterQ" aria-selected="false">Water Quality</a>
+                </div>
+            </div>
+            <div class="col-9">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <!-- Water Quality -->
+                    <div class="tab-pane fade show active" id="v-pills-waterQ" role="tabpanel"
+                        aria-labelledby="v-pills-waterQ-tab">
+                        <!-- Card - GEE Maps, Analysis and Metadeta -->
+                        <div class="card">
+                            <div class="card-header">
+                                <ul class="nav nav-tabs card-header-tabs pull-right" id="wqTab" role="tablist">
+
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#homeWQ"
+                                            role="tab" aria-controls="home" aria-selected="true">Rivers</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="meta-tab" data-toggle="tab" href="#metaWQ" role="tab"
+                                            aria-controls="meta" aria-selected="false">Meta Data</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="data-tab" data-toggle="tab" href="#ccWQ" role="tab"
+                                            aria-controls="data" aria-selected="false">Code Credits</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card-body">
+                                <div class="tab-content" id="TabContent">
+                                    <div class="tab-pane fade show active" id="homeWQ" role="tabpanel"
+                                        aria-labelledby="home-tab">
+                                        <h2>Rivers</h2>
+                                        <p style="text-align: center;">
+                                            <a class="btn btn-primary" data-toggle="collapse" href="#ganga"
+                                                role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                Ganga: Varanasi
+                                            </a>
+                                            <a class="btn btn-primary" data-toggle="collapse" href="#yamuna"
+                                                role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                Yamuna: Delhi
+                                            </a>
+                                            <a class="btn btn-primary" data-toggle="collapse" href="#sabarmati"
+                                                role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                Sabarmati: Ahmedabad
+                                            </a>
+                                            <a class="btn btn-primary" data-toggle="collapse" href="#gomati"
+                                                role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                Gomati: Lucknow
+                                            </a>
+                                            <a class="btn btn-primary" data-toggle="collapse" href="#mithi"
+                                                role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                Mithi: Mumbai
+                                            </a>
+
+                                        </p>
+
+                                        <div class="collapse" id="ganga">
+                                            <div class="card card-body">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <ul class="nav nav-tabs card-header-tabs pull-right"
+                                                            id="gangaTab" role="tablist">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link active" id="home-tab"
+                                                                    data-toggle="tab" href="#homeGanga" role="tab"
+                                                                    aria-controls="home" aria-selected="true">Map</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" id="analysis-tab" data-toggle="tab"
+                                                                    href="#analysisGanga" role="tab"
+                                                                    aria-controls="analysis"
+                                                                    aria-selected="false">Analysis</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" id="data-tab" data-toggle="tab"
+                                                                    href="#dataGanga" role="tab" aria-controls="data"
+                                                                    aria-selected="false">Analysed Data</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <div class="card-body">
+                                                        <div class="tab-content" id="TabContent">
+                                                            <div class="tab-pane fade show active" id="homeGanga"
+                                                                role="tabpanel" aria-labelledby="home">
+                                                                <h2>Ganga: Varanasi</h2>
+                                                                <iframe
+                                                                    src="https://javascriptpractice.users.earthengine.app/view/watergangavar"
+                                                                    frameborder="5" width="790" , height="435">Can't
+                                                                    render page
+                                                                </iframe>
+                                                                <br>
+                                                            </div>
+                                                            <div class="tab-pane fade show" id="analysisGanga"
+                                                                role="tabpanel" aria-labelledby="analysis">
+                                                                <h2>Ganga: Varanasi</h2>
+                                                                <iframe src="waterGanga.html" frameborder="5"
+                                                                    width="790">Can't
+                                                                    render page
+                                                                </iframe>
+                                                            </div>
+                                                            <div class="tab-pane fade show " id="dataGanga"
+                                                                role="tabpanel" aria-labelledby="data">
+                                                                <h2>Ganga: Varanasi</h2>
+                                                                <div style="overflow-x:auto;">
+                                                                    <table class="table table-bordered">
+                                                                        <thead align="center">
+                                                                            <tr>
+                                                                                <th scope="col">Date</th>
+                                                                                <th scope="col" colspan="3">31 March 19
+                                                                                </th>
+                                                                                <th scope="col" colspan="3">16 March 20
+                                                                                </th>
+                                                                                <th scope="col" colspan="3">31 March 20
+                                                                                </th>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th scope="col">Point</th>
+                                                                                <th scope="col">Entry</th>
+                                                                                <th scope="col">Inside</th>
+                                                                                <th scope="col">Exit</th>
+                                                                                <th scope="col">Entry</th>
+                                                                                <th scope="col">Inside</th>
+                                                                                <th scope="col">Exit</th>
+                                                                                <th scope="col">Entry</th>
+                                                                                <th scope="col">Inside</th>
+                                                                                <th scope="col">Exit</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody align="center">
+                                                                            <tr>
+                                                                                <th scope="row">NDTI</th>
+                                                                                <td>-0.163</td>
+                                                                                <td>-0.132</td>
+                                                                                <td>-0.159</td>
+                                                                                <td>-0.02</td>
+                                                                                <td>NA</td>
+                                                                                <td>NA</td>
+                                                                                <td>-0.187</td>
+                                                                                <td>-0.169</td>
+                                                                                <td>-0.198</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="collapse" id="yamuna">
+                                            <div class="card card-body">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <ul class="nav nav-tabs card-header-tabs pull-right"
+                                                            id="yamunaTab" role="tablist">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link active" id="home-tab"
+                                                                    data-toggle="tab" href="#homeYamuna" role="tab"
+                                                                    aria-controls="home" aria-selected="true">Map</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" id="analysis-tab" data-toggle="tab"
+                                                                    href="#analysisYamuna" role="tab"
+                                                                    aria-controls="analysis"
+                                                                    aria-selected="false">Analysis</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" id="data-tab" data-toggle="tab"
+                                                                    href="#dataYamuna" role="tab" aria-controls="data"
+                                                                    aria-selected="false">Analysed Data</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <div class="card-body">
+                                                        <div class="tab-content" id="TabContent">
+                                                            <div class="tab-pane fade show active" id="homeYamuna"
+                                                                role="tabpanel" aria-labelledby="home">
+                                                                <h2>Yamuna: Delhi</h2>
+                                                                <iframe
+                                                                    src="https://javascriptpractice.users.earthengine.app/view/wateryamunadel"
+                                                                    frameborder="5" width="790" , height="435">Can't
+                                                                    render page
+                                                                </iframe>
+                                                                <br>
+                                                            </div>
+                                                            <div class="tab-pane fade show" id="analysisYamuna"
+                                                                role="tabpanel" aria-labelledby="analysis">
+
+                                                                <h2>Yamuna: Delhi</h2>
+                                                                <iframe src="waterYamuna.html" frameborder="5"
+                                                                    width="790">Can't
+                                                                    render page
+                                                                </iframe>
+
+                                                            </div>
+                                                            <div class="tab-pane fade show" id="dataYamuna"
+                                                                role="tabpanel" aria-labelledby="data">
+                                                                <h2>Yamuna: Delhi</h2>
+                                                                <div style="overflow-x:auto;">
+                                                                    <table class="table table-bordered">
+                                                                        <thead align="center">
+                                                                            <tr>
+                                                                                <th scope="col">Date</th>
+                                                                                <th scope="col" colspan="3">31 March 19
+                                                                                </th>
+                                                                                <th scope="col" colspan="3">16 March 20
+                                                                                </th>
+                                                                                <th scope="col" colspan="3">31 March 20
+                                                                                </th>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th scope="col">Point</th>
+                                                                                <th scope="col">Entry</th>
+                                                                                <th scope="col">Inside</th>
+                                                                                <th scope="col">Exit</th>
+                                                                                <th scope="col">Entry</th>
+                                                                                <th scope="col">Inside</th>
+                                                                                <th scope="col">Exit</th>
+                                                                                <th scope="col">Entry</th>
+                                                                                <th scope="col">Inside</th>
+                                                                                <th scope="col">Exit</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody align="center">
+                                                                            <tr>
+                                                                                <th scope="row">NDTI</th>
+                                                                                <td>-0.111</td>
+                                                                                <td>-0.126</td>
+                                                                                <td>-0.105</td>
+                                                                                <td>NA</td>
+                                                                                <td>-0.0125</td>
+                                                                                <td>NA</td>
+                                                                                <td>-0.019</td>
+                                                                                <td>-0.096</td>
+                                                                                <td>-0.105</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="collapse" id="sabarmati">
+                                            <div class="card card-body">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <ul class="nav nav-tabs card-header-tabs pull-right"
+                                                            id="sabarmatiTab" role="tablist">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link active" id="home-tab"
+                                                                    data-toggle="tab" href="#homesabarmati" role="tab"
+                                                                    aria-controls="home" aria-selected="true">Map</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" id="analysis-tab" data-toggle="tab"
+                                                                    href="#analysissabarmati" role="tab"
+                                                                    aria-controls="analysis"
+                                                                    aria-selected="false">Analysis</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" id="data-tab" data-toggle="tab"
+                                                                    href="#datasabarmati" role="tab"
+                                                                    aria-controls="data" aria-selected="false">Analysed
+                                                                    Data</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+
+                                                    <div class="card-body">
+                                                        <div class="tab-content" id="TabContent">
+                                                            <div class="tab-pane fade show active" id="homesabarmati"
+                                                                role="tabpanel" aria-labelledby="home">
+                                                                <h2>Sabarmati: Ahemdabad</h2>
+                                                                <iframe
+                                                                    src="https://javascriptpractice.users.earthengine.app/view/watersabarmatiahm"
+                                                                    frameborder="5" width="790" , height="435">Can't
+                                                                    render page
+                                                                </iframe>
+                                                                <br>
+                                                            </div>
+                                                            <div class="tab-pane fade show" id="analysissabarmati"
+                                                                role="tabpanel" aria-labelledby="home">
+
+                                                                <h2>Sabarmati: Ahmedabad</h2>
+                                                                <iframe src="waterSabarmati.html" frameborder="5"
+                                                                    width="790" >Can't
+                                                                    render page
+                                                                </iframe>
+
+                                                            </div>
+                                                            <div class="tab-pane fade show" id="datasabarmati"
+                                                                role="tabpanel" aria-labelledby="home">
+                                                                <h2>Sabarmati: Ahemdabad</h2>
+                                                                <div style="overflow-x:auto;">
+                                                                    <table class="table table-bordered">
+                                                                        <thead align="center">
+                                                                            <tr>
+                                                                                <th scope="col">Date</th>
+                                                                                <th scope="col" colspan="3">31 March 19
+                                                                                </th>
+                                                                                <th scope="col" colspan="3">16 March 20
+                                                                                </th>
+                                                                                <th scope="col" colspan="3">31 March 20
+                                                                                </th>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th scope="col">Point</th>
+                                                                                <th scope="col">Entry</th>
+                                                                                <th scope="col">Inside</th>
+                                                                                <th scope="col">Exit</th>
+                                                                                <th scope="col">Entry</th>
+                                                                                <th scope="col">Inside</th>
+                                                                                <th scope="col">Exit</th>
+                                                                                <th scope="col">Entry</th>
+                                                                                <th scope="col">Inside</th>
+                                                                                <th scope="col">Exit</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody align="center">
+                                                                            <tr>
+                                                                                <th scope="row">NDTI</th>
+                                                                                <td>-0.106</td>
+                                                                                <td>-0.204</td>
+                                                                                <td>NA</td>
+                                                                                <td>-0.125</td>
+                                                                                <td>-0.138</td>
+                                                                                <td>-0.117</td>
+                                                                                <td>-0.117</td>
+                                                                                <td>-0.181</td>
+                                                                                <td>-0.130</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="collapse" id="gomati">
+                                            <div class="card card-body">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <ul class="nav nav-tabs card-header-tabs pull-right"
+                                                            id="gomatiTab" role="tablist">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link active" id="home-tab"
+                                                                    data-toggle="tab" href="#homegomati" role="tab"
+                                                                    aria-controls="home" aria-selected="true">Map</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" id="analysis-tab" data-toggle="tab"
+                                                                    href="#analysisgomati" role="tab"
+                                                                    aria-controls="analysis"
+                                                                    aria-selected="false">Analysis</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" id="data-tab" data-toggle="tab"
+                                                                    href="#datagomati" role="tab" aria-controls="data"
+                                                                    aria-selected="false">Analysed Data</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+
+                                                    <div class="card-body">
+                                                        <div class="tab-content" id="TabContent">
+                                                            <div class="tab-pane fade show active" id="homegomati"
+                                                                role="tabpanel" aria-labelledby="home">
+                                                                <h2>Gomati: Lucknow</h2>
+                                                                <iframe
+                                                                    src="https://javascriptpractice.users.earthengine.app/view/watergomatiluc"
+                                                                    frameborder="5" width="790" , height="435">Can't
+                                                                    render page
+                                                                </iframe>
+                                                                <br>
+                                                            </div>
+                                                            <div class="tab-pane fade show" id="analysisgomati"
+                                                                role="tabpanel" aria-labelledby="home">
+
+                                                                <h2>Gomati: Lucknow</h2>
+                                                                <iframe src="waterGomati.html" frameborder="5"
+                                                                    width="790">Can't
+                                                                    render page
+                                                                </iframe>
+
+                                                            </div>
+                                                            <div class="tab-pane fade show" id="datagomati"
+                                                                role="tabpanel" aria-labelledby="home">
+                                                                <h2>Gomati: Lucknow</h2>
+                                                                <div style="overflow-x:auto;">
+                                                                    <table class="table table-bordered">
+                                                                        <thead align="center">
+                                                                            <tr>
+                                                                                <th scope="col">Date</th>
+                                                                                <th scope="col" colspan="3">31 March 19
+                                                                                </th>
+                                                                                <th scope="col" colspan="3">16 March 20
+                                                                                </th>
+                                                                                <th scope="col" colspan="3">31 March 20
+                                                                                </th>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th scope="col">Point</th>
+                                                                                <th scope="col">Entry</th>
+                                                                                <th scope="col">Inside</th>
+                                                                                <th scope="col">Exit</th>
+                                                                                <th scope="col">Entry</th>
+                                                                                <th scope="col">Inside</th>
+                                                                                <th scope="col">Exit</th>
+                                                                                <th scope="col">Entry</th>
+                                                                                <th scope="col">Inside</th>
+                                                                                <th scope="col">Exit</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody align="center">
+                                                                            <tr>
+                                                                                <th scope="row">NDTI</th>
+                                                                                <td>NA</td>
+                                                                                <td>NA</td>
+                                                                                <td>NA</td>
+                                                                                <td>-0.095</td>
+                                                                                <td>-0.029</td>
+                                                                                <td>-0.133</td>
+                                                                                <td>-0.091</td>
+                                                                                <td>-0.064</td>
+                                                                                <td>-0.055</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="collapse" id="mithi">
+                                            <div class="card card-body">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <ul class="nav nav-tabs card-header-tabs pull-right"
+                                                            id="mithiTab" role="tablist">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link active" id="home-tab"
+                                                                    data-toggle="tab" href="#homemithi" role="tab"
+                                                                    aria-controls="home" aria-selected="true">Map</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" id="analysis-tab" data-toggle="tab"
+                                                                    href="#analysismithi" role="tab"
+                                                                    aria-controls="analysis"
+                                                                    aria-selected="false">Analysis</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" id="data-tab" data-toggle="tab"
+                                                                    href="#datamithi" role="tab" aria-controls="data"
+                                                                    aria-selected="false">Analysed Data</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+
+                                                    <div class="card-body">
+                                                        <div class="tab-content" id="TabContent">
+                                                            <div class="tab-pane fade show active" id="homemithi"
+                                                                role="tabpanel" aria-labelledby="home">
+                                                                <h2>Mithi: Mumbai</h2>
+                                                                <iframe
+                                                                    src="https://javascriptpractice.users.earthengine.app/view/watermithimum"
+                                                                    frameborder="5" width="790">Can't
+                                                                    render page
+                                                                </iframe>
+                                                                <br>
+                                                            </div>
+                                                            <div class="tab-pane fade show" id="analysismithi"
+                                                                role="tabpanel" aria-labelledby="home">
+
+                                                                <h2>Mithi: Mumbai</h2>
+                                                                <iframe src="waterMithi.html" frameborder="5"
+                                                                    width="790" >Can't
+                                                                    render page
+                                                                </iframe>
+                                                            </div>
+                                                            <div class="tab-pane fade show" id="datamithi"
+                                                                role="tabpanel" aria-labelledby="home">
+                                                                <h2>Mithi: Mumbai</h2>
+                                                                <div style="overflow-x:auto;">
+                                                                    <table class="table table-bordered">
+                                                                        <thead align="center">
+                                                                            <tr>
+                                                                                <th scope="col">Date</th>
+                                                                                <th scope="col" colspan="3">31 March 19
+                                                                                </th>
+                                                                                <th scope="col" colspan="3">16 March 20
+                                                                                </th>
+                                                                                <th scope="col" colspan="3">31 March 20
+                                                                                </th>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th scope="col">Point</th>
+                                                                                <th scope="col">Entry</th>
+                                                                                <th scope="col">Inside</th>
+                                                                                <th scope="col">Exit</th>
+                                                                                <th scope="col">Entry</th>
+                                                                                <th scope="col">Inside</th>
+                                                                                <th scope="col">Exit</th>
+                                                                                <th scope="col">Entry</th>
+                                                                                <th scope="col">Inside</th>
+                                                                                <th scope="col">Exit</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody align="center">
+                                                                            <tr>
+                                                                                <th scope="row">NDTI</th>
+                                                                                <td>-0.084</td>
+                                                                                <td>-0.063</td>
+                                                                                <td>-0.087</td>
+                                                                                <td>-0.188</td>
+                                                                                <td>-0.090</td>
+                                                                                <td>-0.123</td>
+                                                                                <td>-0.148</td>
+                                                                                <td>-0.100</td>
+                                                                                <td>-0.133</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="metaWQ" role="tabpanel" aria-labelledby="meta-tab">
+                                        <h2>Sentinel-2 MSI: MultiSpectral Instrument, Level-1C</h2>
+                                        <p><strong>Dataset Availability:</strong> 2015-06-23T00:00:00 - Present
+                                        </p>
+                                        <p><strong>Dataset Provider:</strong> European Union/ESA/Copernicus</p>
+                                        <p>Sentinel-2 is a wide-swath, high-resolution, multi-spectral imaging mission
+                                            supporting Copernicus Land Monitoring studies, including the monitoring of
+                                            vegetation, soil and water cover, as well as observation of inland waterways
+                                            and coastal areas.
+
+                                            The Sentinel-2 data contain 13 UINT16 spectral bands representing TOA
+                                            reflectance scaled by 10000. In addition, three QA bands are present where
+                                            one (QA60) is a bitmask band with cloud mask information.
+
+                                            Each Sentinel-2 product (zip archive) may contain multiple granules. Each
+                                            granule becomes a separate Earth Engine asset. EE asset ids for Sentinel-2
+                                            assets have the following format:
+                                            COPERNICUS/S2/20151128T002653_20151128T102149_T56MNN. Here the first numeric
+                                            part represents the sensing date and time, the second numeric part
+                                            represents the product generation date and time, and the final 6-character
+                                            string is a unique granule identifier indicating its UTM grid reference.
+
+                                            The Level-2 data produced by ESA can be found in the collection
+                                            COPERNICUS/S2_SR.
+                                        </p>
+                                        <img src="images/sen1CBands.PNG" alt="" width="790">
+                                    </div>
+
+                                    <div class="tab-pane fade" id="ccWQ" role="tabpanel" aria-labelledby="data-tab">
+                                        <h3 style="text-align: center;">The base code for water quality assesment is
+                                            developed by:</h3>
+                                        <h3 style="text-align: center;">Land Hydrology Division, SAC, ISRO</h3>
+                                        <br><br>
+                                        <h4 style="text-align: center;">Modified by:</h4>
+                                        <h4 style="text-align: center;">Chaitanya Joshi, IIST</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

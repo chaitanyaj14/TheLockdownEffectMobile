@@ -1,0 +1,290 @@
+<!-- CO Estimation-->
+<div class="tab-pane fade show" id="v-pills-co" role="tabpanel" aria-labelledby="v-pills-co-tab">
+    <!-- Card - GEE Maps, Analysis and Metadeta -->
+    <div class="card">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs pull-right" id="indcTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="home-tabco" data-toggle="tab" href="#homeindc" role="tab"
+                        aria-controls="home" aria-selected="true">Map</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="analysis-tabco" data-toggle="tab" href="#analysisindc" role="tab"
+                        aria-controls="analysis" aria-selected="false">Analysis</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="data-tabco" data-toggle="tab" href="#dataindc" role="tab"
+                        aria-controls="data" aria-selected="false">Analysed Data</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="data-tabco" data-toggle="tab" href="#metaindc" role="tab"
+                        aria-controls="data" aria-selected="false">Meta Data</a>
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="card-body">
+            <div class="tab-content" id="TabContent">
+                <div class="tab-pane fade show active" id="homeindc" role="tabpanel" aria-labelledby="home">
+                    <iframe src="--https://javascriptpractice.users.earthengine.app/view/coindia" frameborder="5"
+                        width="890" , height="435">Can't render page
+                    </iframe>
+                    <br>
+                </div>
+                <div class="tab-pane fade show" id="analysisindc" role="tabpanel" aria-labelledby="home">
+                    <div id="carouselExampleControlsco" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner" data-interval="false">
+                            <div class="carousel-item active">
+                                <div style="height: 400px;">
+                                    <h2>Delhi</h2>
+                                    <svg id="pieDC" class="mypiechart" style="max-width: 500px; margin: auto;"></svg>
+                                    <script>
+                                        var testdataDC = [
+                                            { key: "Mar/Apr19", y: 420 },
+                                            { key: "Jan20", y: 424 },
+                                            { key: "Mar/Apr20", y: 377 }
+                                        ];
+
+                                        var arcRadiusDC = [
+                                            { inner: 0, outer: 0.99 },
+                                            { inner: 0, outer: 1 },
+                                            { inner: 0, outer: 0.89 }
+                                        ];
+
+                                        var height = 350;
+                                        var width = 350;
+
+                                        nv.addGraph(function () {
+                                            var chart = nv.models.pieChart()
+                                                .x(function (d) { return d.key })
+                                                .y(function (d) { return d.y })
+                                                .donut(true)
+                                                .showLabels(true)
+                                                .width(width)
+                                                .height(height)
+                                                .arcsRadius(arcRadiusDC)
+                                                .labelsOutside(true)
+                                                .id('donut3');
+
+                                            d3.select("#pieDC")
+                                                .datum(testdataDC)
+                                                .transition().duration(1200)
+                                                .attr('width', width)
+                                                .attr('height', height)
+                                                .call(chart);
+
+                                            return chart;
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div style="height: 400px;">
+                                    <h2>Mumbai</h2>
+                                    <svg id="pieMC" class="mypiechart" style="max-width: 500px; margin: auto;"></svg>
+                                    <script>
+                                        var testdataMC = [
+                                            { key: "Mar/Apr19", y: 409 },
+                                            { key: "Jan20", y: 432 },
+                                            { key: "Mar/Apr20", y: 421 }
+                                        ];
+
+                                        var arcRadiusMC = [
+                                            { inner: 0, outer: 0.94 },
+                                            { inner: 0, outer: 1 },
+                                            { inner: 0, outer: 0.97 }
+                                        ];
+
+                                        var height = 350;
+                                        var width = 350;
+
+                                        nv.addGraph(function () {
+                                            var chart = nv.models.pieChart()
+                                                .x(function (d) { return d.key })
+                                                .y(function (d) { return d.y })
+                                                .donut(true)
+                                                .showLabels(true)
+                                                .width(width)
+                                                .height(height)
+                                                .arcsRadius(arcRadiusMC)
+                                                .labelsOutside(true)
+                                                .id('donut3');
+
+                                            d3.select("#pieMC")
+                                                .datum(testdataMC)
+                                                .transition().duration(1200)
+                                                .attr('width', width)
+                                                .attr('height', height)
+                                                .call(chart);
+
+                                            return chart;
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+
+                            <div class="carousel-item">
+                                <div style="height: 400px;">
+                                    <h2>Kolkata</h2>
+                                    <svg id="pieKC" class="mypiechart" style="max-width: 500px; margin: auto;"></svg>
+                                    <script>
+                                        var testdataKC = [
+                                            { key: "Mar/Apr19", y: 487 },
+                                            { key: "Jan20", y: 488 },
+                                            { key: "Mar/Apr20", y: 472 }
+                                        ];
+
+                                        var arcRadiusKC = [
+                                            { inner: 0, outer: 0.99 },
+                                            { inner: 0, outer: 1 },
+                                            { inner: 0, outer: 0.96 }
+                                        ];
+
+                                        var height = 350;
+                                        var width = 350;
+
+                                        nv.addGraph(function () {
+                                            var chart = nv.models.pieChart()
+                                                .x(function (d) { return d.key })
+                                                .y(function (d) { return d.y })
+                                                .donut(true)
+                                                .showLabels(true)
+                                                .width(width)
+                                                .height(height)
+                                                .arcsRadius(arcRadiusKC)
+                                                .labelsOutside(true)
+                                                .id('donut3');
+
+                                            d3.select("#pieKC")
+                                                .datum(testdataKC)
+                                                .transition().duration(1200)
+                                                .attr('width', width)
+                                                .attr('height', height)
+                                                .call(chart);
+
+                                            return chart;
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div style="height: 400px;">
+                                    <h2>Chennai</h2>
+                                    <svg id="pieCC" class="mypiechart" style="max-width: 500px; margin: auto;"></svg>
+                                    <script>
+                                        var testdataCC = [
+                                            { key: "Mar/Apr19", y: 440 },
+                                            { key: "Jan20", y: 388 },
+                                            { key: "Mar/Apr20", y: 425 }
+                                        ];
+
+                                        var arcRadiusCC = [
+                                            { inner: 0, outer: 1 },
+                                            { inner: 0, outer: 0.88 },
+                                            { inner: 0, outer: 0.96 }
+                                        ];
+
+                                        var height = 350;
+                                        var width = 350;
+
+                                        nv.addGraph(function () {
+                                            var chart = nv.models.pieChart()
+                                                .x(function (d) { return d.key })
+                                                .y(function (d) { return d.y })
+                                                .donut(true)
+                                                .showLabels(true)
+                                                .width(width)
+                                                .height(height)
+                                                .arcsRadius(arcRadiusCC)
+                                                .labelsOutside(true)
+                                                .id('donut3');
+
+                                            d3.select("#pieCC")
+                                                .datum(testdataCC)
+                                                .transition().duration(1200)
+                                                .attr('width', width)
+                                                .attr('height', height)
+                                                .call(chart);
+
+                                            return chart;
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                        <a class=" carousel-control-prev" href="#carouselExampleControlsco" role="button"
+                            data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleControlsco" role="button"
+                            data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                    <p>*Values are in 10<sup>-4</sup></p>
+                </div>
+                <div class="tab-pane fade show" id="dataindc" role="tabpanel" aria-labelledby="home">
+                    <table class="table table-bordered">
+                        <thead align="center">
+                            <tr>
+                                <th scope="col">City</th>
+                                <th scope="col">Mar/Apr 19</th>
+                                <th scope="col">Jan 20</th>
+                                <th scope="col">Mar/Apr 20</th>
+                            </tr>
+                        </thead>
+                        <tbody align="center">
+                            <tr>
+                                <th scope="row">Mumbai</th>
+                                <td>0.0409</td>
+                                <td>0.0432</td>
+                                <td>0.0421</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Delhi</th>
+                                <td>0.0420</td>
+                                <td>0.0424</td>
+                                <td>0.0377</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Kolkata</th>
+                                <td>0.0487</td>
+                                <td>0.0488</td>
+                                <td>0.0472</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Chennai</th>
+                                <td>0.0440</td>
+                                <td>0.0388</td>
+                                <td>0.0425</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade show" id="metaindc" role="tabpanel" aria-labelledby="home">
+                    <h2>Sentinel-5P NRTI CO: Near Real-Time Carbon Monoxide</h2>
+                    <p><strong>Dataset Availability:</strong> 2018-11-22T12:00:13 - Present</p>
+                    <p><strong>Dataset Provider:</strong> European Union/ESA/Copernicus</p>
+                    <p><strong>NRTI/L3_CO: </strong>
+                        This dataset provides near real-time high-resolution imagery of CO concentrations.
+
+                        Carbon monoxide (CO) is an important atmospheric trace gas for understanding tropospheric
+                        chemistry. In certain urban areas, it is a major atmospheric pollutant. Main sources of CO are
+                        combustion of fossil fuels, biomass burning, and atmospheric oxidation of methane and other
+                        hydrocarbons. Whereas fossil fuel combustion is the main source of CO at northern mid-latitudes,
+                        the oxidation of isoprene and biomass burning play an important role in the tropics. TROPOMI on
+                        the Sentinel 5 Precursor (S5P) satellite observes the CO global abundance exploiting clear-sky
+                        and cloudy-sky Earth radiance measurements in the 2.3 µm spectral range of the shortwave
+                        infrared (SWIR) part of the solar spectrum. TROPOMI clear sky observations provide CO total
+                        columns with sensitivity to the tropospheric boundary layer. For cloudy atmospheres, the column
+                        sensitivity changes according to the light path.
+                    </p>
+                    <img src="/site/images/coBands.PNG" alt="" width="790">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
